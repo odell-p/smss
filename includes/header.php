@@ -101,6 +101,28 @@ if ($result_current_session && $result_current_session->num_rows > 0) {
                     </li>
                 <?php endif; ?>
 
+                                <!-- ========================================================== -->
+                <!--   NEW: USER MANAGEMENT MENU BLOCK (ADMIN ONLY)             -->
+                <!-- ========================================================== -->
+                <?php if ($user_role == 'Admin'): ?>
+                    <?php
+                        $user_management_pages = ['manage_users.php'];
+                        $is_user_mgmt_open = in_array($current_page, $user_management_pages);
+                    ?>
+                    <li class="has-submenu <?php echo $is_user_mgmt_open ? 'open' : ''; ?>">
+                        <a href="#" class="nav-link">
+                            <i class="fa-solid fa-users-gear"></i> 
+                            <span>User Management</span> 
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <ul class="submenu" style="<?php echo $is_user_mgmt_open ? 'display: block;' : ''; ?>">
+                            <li class="<?php echo ($current_page == 'manage_users.php') ? 'active' : ''; ?>"><a href="manage_users.php">Manage Staff</a></li>
+                            <li><a href="#">Manage Roles</a></li>
+                        </ul>
+                    </li>
+                <?php endif; ?>
+                <!-- ========================================================== -->
+
                 <!-- HOD-specific Links -->
                 <?php if ($user_role == 'HOD'): ?>
                     <li class="has-submenu">
