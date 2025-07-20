@@ -1,0 +1,358 @@
+/* --- Google Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* --- CSS Variables for Easy Themeing --- */
+:root {
+    --primary-bg: #f4f7fa;
+    --sidebar-bg: #1f2937; /* Dark Gray */
+    --sidebar-text: #d1d5db;
+    --sidebar-text-hover: #ffffff;
+    --sidebar-active-bg: #374151;
+    --card-bg: #ffffff;
+    --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --card-orange: #ff9f43;
+    --card-purple: #8e44ad;
+    --card-red: #ea5455;
+    --card-blue: #007bff;
+    --card-green: #28a745;
+    --card-teal: #17a2b8;
+    --card-gray: #6c757d;
+}
+
+
+/* --- General & Reset --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-primary);
+    display: flex; /* This is for the main sidebar-content layout */
+    padding-top: 60px; /* Push body down to account for fixed top-bar */
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* =============================================== */
+/*   CORE LAYOUT (SIDEBAR, TOP-BAR, MAIN CONTENT)  */
+/* =============================================== */
+
+.wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 250px;
+    right: 0;
+    height: 60px;
+    background: #fff;
+    z-index: 999;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    transition: left 0.3s ease-in-out;
+}
+
+#sidebar {
+    width: 250px;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    padding-top: 60px; /* Space for logo/header if needed */
+    flex-shrink: 0;
+    transition: width 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+#main-content {
+    flex-grow: 1;
+    margin-left: 250px; /* Offset content by sidebar width */
+    padding: 2rem;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+/* =============================================== */
+/*   SIDEBAR STYLES (Navigation, Submenus)         */
+/* =============================================== */
+
+.sidebar-nav {
+    list-style-type: none;
+}
+
+.sidebar-nav li a {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    color: var(--sidebar-text);
+    transition: background-color 0.2s, color 0.2s;
+    border-left: 3px solid transparent;
+}
+.sidebar-nav li a:hover {
+    background-color: var(--sidebar-active-bg);
+    color: var(--sidebar-text-hover);
+}
+.sidebar-nav li.active > a {
+    background-color: var(--sidebar-active-bg);
+    color: var(--sidebar-text-hover);
+    border-left-color: var(--card-orange);
+}
+.sidebar-nav i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Submenu specific styles */
+.sidebar-nav li.has-submenu > a.nav-link {
+    justify-content: space-between;
+}
+.sidebar-nav li.has-submenu .fa-chevron-right {
+    transition: transform 0.25s ease-in-out;
+    font-size: 0.7em;
+}
+.sidebar-nav li.has-submenu.open > a .fa-chevron-right {
+    transform: rotate(90deg);
+}
+
+.submenu {
+    display: none; /* Hidden by default, JS will toggle */
+    list-style-type: none;
+    padding-left: 20px;
+    background-color: #111827; /* Darker bg for contrast */
+}
+.submenu li a {
+    padding-left: 2.5rem;
+    font-size: 0.9em;
+}
+
+/* =============================================== */
+/*   TOGGLE BUTTONS & COLLAPSED/ACTIVE STATES      */
+/* =============================================== */
+
+/* --- Mobile Toggle Button (☰) --- */
+#mobile-menu-toggle {
+    display: none; /* Hidden on desktop */
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-right: 1rem;
+}
+
+/* --- Desktop Toggle Button (<<) --- */
+.sidebar-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 1rem;
+    border-top: 1px solid var(--sidebar-active-bg);
+    display: flex;
+    justify-content: flex-end;
+    transition: all 0.3s ease-in-out;
+}
+#desktop-sidebar-toggle {
+    background: var(--sidebar-active-bg);
+    color: var(--sidebar-text);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+#desktop-sidebar-toggle:hover {
+    background-color: var(--card-orange);
+    color: #fff;
+}
+
+/* --- Desktop Collapsed State --- */
+#sidebar.collapsed {
+    width: 80px;
+}
+#sidebar.collapsed .sidebar-nav span,
+#sidebar.collapsed .sidebar-nav .fa-chevron-right,
+#sidebar.collapsed .submenu {
+    display: none; /* Hide text, arrow, and submenus */
+}
+#sidebar.collapsed .sidebar-nav a {
+    justify-content: center; /* Center the icon */
+}
+#sidebar.collapsed .sidebar-nav a i {
+    margin-right: 0;
+}
+#sidebar.collapsed .sidebar-footer {
+    justify-content: center;
+}
+#sidebar.collapsed #desktop-sidebar-toggle .fa-angles-left {
+    transform: rotate(180deg); /* Flip the icon */
+}
+#main-content.collapsed, .top-bar.collapsed {
+    margin-left: 80px;
+    left: 80px;
+}
+
+/* =============================================== */
+/*   RESPONSIVE DESIGN FOR MOBILE                  */
+/* =============================================== */
+@media (max-width: 768px) {
+    #mobile-menu-toggle {
+        display: block; /* Show mobile button */
+    }
+    .sidebar-footer {
+        display: none; /* Hide desktop button */
+    }
+
+    #sidebar {
+        left: -250px; /* Hide sidebar off-screen */
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    #sidebar.active {
+        left: 0; /* JS adds this class to show it */
+    }
+    
+    #main-content {
+        margin-left: 0; /* Full width content */
+        padding: 1rem;
+    }
+    
+    /* Make sure desktop 'collapsed' state doesn't affect mobile view */
+    #sidebar.collapsed {
+        width: 250px; /* Revert to full width */
+    }
+    #main-content.collapsed, .top-bar.collapsed {
+        margin-left: 0;
+        left: 0;
+    }
+    
+    .top-bar {
+        left: 0;
+    }
+    
+    .page-header-with-button, .dashboard-row {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+
+/* =============================================== */
+/*   PAGE-SPECIFIC STYLES (Forms, Tables, etc.)    */
+/* =============================================== */
+
+/* --- Page Headers --- */
+.page-header-with-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+.page-header-with-button h1 { font-size: 1.8rem; margin: 0; }
+.page-header-with-button p { color: var(--text-secondary); margin-top: 0.5rem; }
+
+/* --- Buttons --- */
+.btn {
+    background-color: var(--sidebar-bg);
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+.btn:hover { background-color: #374151; }
+.btn-primary {
+    background-color: var(--card-orange);
+}
+.btn-primary:hover {
+    background-color: #e68a2e;
+}
+.btn.disabled {
+    pointer-events: none;
+    opacity: 0.65;
+}
+
+/* --- Forms --- */
+.form-row { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.form-group { flex: 1; min-width: 200px; }
+.form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: #fff;
+}
+
+/* --- Content Panels & Cards (from your old file) --- */
+.content-panel { background-color: var(--card-bg); border-radius: 8px; box-shadow: var(--card-shadow); padding: 2rem; margin-bottom: 1.5rem; }
+.content-panel h2 { margin-bottom: 1rem; font-weight: 600; }
+.card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+.stat-card { background-color: var(--card-bg); border-radius: 8px; box-shadow: var(--card-shadow); border-left: 5px solid; transition: transform 0.2s; }
+.stat-card:hover { transform: translateY(-5px); }
+.stat-card.orange { border-color: var(--card-orange); }
+.stat-card.purple { border-color: var(--card-purple); }
+.stat-card.red { border-color: var(--card-red); }
+.stat-card.blue { border-color: var(--card-blue); }
+.stat-card.green { border-color: var(--card-green); }
+.stat-card .card-body { padding: 1.5rem; }
+.stat-card h3 { font-size: 0.9rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; margin-bottom: 0.5rem; }
+.stat-card p { font-size: 2.5rem; font-weight: 700; color: var(--text-primary); }
+
+/* --- Modal Styles --- */
+.modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center;}
+.modal-content { background-color: #fefefe; padding: 0; border: 1px solid #888; width: 90%; max-width: 500px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); animation: fadeIn 0.3s; }
+@keyframes fadeIn { from {opacity: 0; transform: translateY(-20px);} to {opacity: 1; transform: translateY(0);} }
+.modal-header { padding: 1rem 1.5rem; border-bottom: 1px solid #e5e5e5; display: flex; justify-content: space-between; align-items: center; }
+.modal-header h2 { font-size: 1.25rem; margin: 0; }
+.close-btn { color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+.close-btn:hover, .close-btn:focus { color: #000; }
+.modal-body { padding: 1.5rem; }
+.modal-body .form-group { margin-bottom: 1rem; }
+
+/* --- DataTables Customization --- */
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter { margin-bottom: 1em; }
+.dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_paginate { margin-top: 1em; }
+.dataTables_wrapper .dataTables_paginate .paginate_button { padding: 0.4em 0.8em; margin-left: 2px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; }
+.dataTables_wrapper .dataTables_paginate .paginate_button.current { background: var(--sidebar-bg); color: #fff !important; border-color: var(--sidebar-bg); }
+
+/* --- Custom Status & Action Styles --- */
+.status-active, .status-badge.status-active { color: #166534; font-weight: bold; background-color: #dcfce7; padding: 0.25rem 0.6rem; border-radius: 12px; }
+.status-inactive, .status-badge.status-inactive { color: #991b1b; font-weight: bold; background-color: #fee2e2; padding: 0.25rem 0.6rem; border-radius: 12px; }
+a.action-link { color: #007bff; text-decoration: none; font-weight: bold; }
+a.action-link:hover { text-decoration: underline; }
+
+.status-pending-password-change {
+    background-color: #fef9c3; /* Light Yellow */
+    color: #854d0e;     /* Dark Yellow */
+}
+
+.form-help-text {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
